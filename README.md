@@ -189,3 +189,82 @@ your new environment is ready.
 rustc 1.46.0-nightly (feb3536eb 2020-06-09)
 ```
 
+Now let's serve some HTTP with Rocket.  First, create a new Rust project:
+
+`cargo init --vcs git .`
+
+This creates `src/main.rs` and `Cargo.toml`.  It will also initiate a git repo.
+
+Add Rocket as a dependency to `Cargo.toml`:
+
+```
+[dependencies]
+rocket = "0.4.3"
+```
+
+`cargo build`
+
+This will download all dependencies and precompile Rocket.
+
+Now let's make a dumb HTTP server; edit `src/main.rs`:
+
+```
+#![feature(proc_macro_hygiene, decl_macro)] // language features needed by Rocket
+
+// Import the rocket macros
+#[macro_use]
+extern crate rocket;
+
+// Create route / that returns "Hello, world!"
+#[get("/")]
+fn index() -> &'static str {
+    "Hello, world!"
+}
+
+fn main() {
+    rocket::ignite().mount("/", routes![index]).launch();
+}
+```
+
+`cargo build`
+
+This will create a binary at `target/debug/hello`
+
+`target/debug/hello &`
+
+`curl http://localhost:8000`
+
+```
+Hello world!
+```
+
+`fg` (control-c to kill the server)
+
+Now let's make this into a nix package, using naersk, first adding it
+to niv: `niv add nmattia/naersk`
+
+Create `hello.nix`:
+
+```
+# import niv sources and the pinned nixpkgs
+{ sources ? import ./nix/sources.nix, pkgs ? import sources.nixpkgs { }}:
+let
+  # import rust compiler
+  rust = import ./nix/rust.nix { inherit sources; };
+  
+  # configure naersk to use our pinned rust compiler
+  naersk = pkgs.callPackage sources.naersk {
+    rustc = rust;
+    cargo = rust;
+  };
+  
+  # tell nix-build to ignore the `target` directory
+  src = builtins.filterSource
+    (path: type: type != "directory" || builtins.baseNameOf path != "target")
+    ./.;
+in naersk.buildPackage {
+  inherit src;
+  remapPathPrefix =
+    true; # remove nix store references for a smaller output package
+}
+```
