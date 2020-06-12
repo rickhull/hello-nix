@@ -14,5 +14,5 @@ pkgs.mkShell {
   ];
 
   # Environment vars
-  HELLO="rust";
+  # HELLO="rust";
 }
