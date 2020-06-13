@@ -5,7 +5,7 @@ We're using direnv, niv, and lorri to craft a shell environment optimized
   for Nix workflows, on a per-directory basis.
 Direnv gives us a way to maintain a project-specific shell environment,
   just by entering the project directory.
-Niv helps us manage dependencies.
+Niv helps manage dependencies.
 Lorri integrates direnv with Nix workflows, maintaining some state to avoid
   costly unnecessary rebuilds.
 
@@ -26,16 +26,17 @@ Edit `/etc/nixos/configuration.nix`:
   # ...
 ```
 
-You may need to manually start or restart the lorri daemon via `sysctl` due
-  to a known issue.
-Now we proceed to setup direnv, niv, and lorri.
+The lorri daemon should be running after `nixos-rebuild switch`, but
+  there is currently a known issue where you may need to manually start or
+  restart the lorri daemon via `systemctl` after the install.
+Next, proceed to setup direnv, niv, and lorri.
 Add the direnv shell hook, e.g. in `~/.bashrc` for bash shells:
 
 ```shell
 eval "$(direnv hook bash)"`
 ```
 
-Now create a project directory and do some initialization:
+Create a project directory and do some initialization:
 
 ```shell
 $ mkdir -p hello
@@ -46,7 +47,7 @@ $ lorri init # creates shell.nix and .envrc
 
 Direnv works via the presence of `.envrc`, which you can see is created by
   `lorri init`.
-Now we should be able to just `cd .` to trigger direnv behavior.
+`cd .` should trigger direnv behavior.
 However, direnv is blocked from operating unless it is specifically allowed.
 You will see a message like:
 
@@ -55,9 +56,9 @@ $ cd .
 direnv: error /path/to/.envrc is blocked. Run `direnv allow` to approve its content
 ```
 
-So just `direnv allow` and you should see some direnv output whenever you
+Run `direnv allow` and you should now see some direnv output whenever you
   change into the `hello` directory.
-Let's add the `hello` package to our project environment by editing the
+Add the `hello` package to our project environment by editing the
   `shell.nix` created by `lorri init`:
 
 ```nix
@@ -73,8 +74,8 @@ pkgs.mkShell {
 }
 ```
 
-Here, we are pinning the source packages that are specified in `sources.nix`
-and `sources.json`, rather than depending on the external state of nixpkgs.
+Here, we pin the source packages (specified in `sources.nix`
+and `sources.json`), rather than depending on the external state of nixpkgs.
 With lorri running as a service, you should now be able to run `hello`:
 
 ```
@@ -111,7 +112,8 @@ $ echo $HELLO
 world
 ```
 
-OK, now we can make a demo project using Rust.
+OK, now we have direnv, niv, and lorri working for us.
+Let's make a demo project using Rust.
 Since we are managing our dependencies with niv, let's make niv aware of
   Rust packages directly from mozilla via github:
 
