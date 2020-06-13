@@ -94,9 +94,9 @@ $ hello
 Hello, world!
 ```
 
-### Add environement variable
+### Add environment variable
 
-Add an environment variable to `shell.nix`:
+Add `HELLO` to `shell.nix`:
 
 ```nix
 # shell.nix
@@ -116,7 +116,7 @@ pkgs.mkShell {
 
 Whenever direnv notices changes, lorri will rebuild what is necessary in the
   background.
-Note that this will take some time before your changes are apparent.
+Note that this may take some time before your changes are apparent.
 You will see some direnv output coming from the lorri service when the
   environment is updated.
 
@@ -125,11 +125,12 @@ $ echo $HELLO
 world
 ```
 
+OK, now we have direnv, niv, and lorri working for us.
+
 ## Create Rust project
 
 ### Install Rust
 
-OK, now we have direnv, niv, and lorri working for us.
 Let's make a demo project using Rust.
 Since we are managing our dependencies with niv, make niv aware of
   Rust packages directly from mozilla (via github):
