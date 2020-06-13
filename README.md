@@ -52,8 +52,7 @@ $ niv init # creates nix/sources.json and nix/sources.nix
 $ lorri init # creates shell.nix and .envrc
 ```
 
-Direnv works via the presence of `.envrc`, which you can see is created by
-  `lorri init`.
+Direnv works via the presence of `.envrc`, as created by `lorri init`.
 Changing the current dir to a project dir triggers direnv behavior.
 However, direnv is blocked from operating unless it is specifically allowed.
 You will see a message like:
