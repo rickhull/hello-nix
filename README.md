@@ -3,14 +3,17 @@ https://christine.website/blog/how-i-start-nix-2020-03-08
 
 We're using direnv, niv, and lorri to craft a shell environment optimized
   for Nix workflows, on a per-directory basis.
-Direnv gives us a way to maintain a project-specific shell environment,
-  just by entering the project directory.
-Niv helps manage dependencies.
-Lorri integrates direnv with Nix workflows, maintaining some state to avoid
+**Direnv** maintains a project-specific shell environment, triggered by
+  entering the project directory.
+**Niv** helps manage dependencies in the Nix realm.
+**Lorri** integrates direnv with Nix workflows, maintaining some state to avoid
   costly unnecessary rebuilds.
 
 Christine's workflow works with any Nix install, whereas my focus is on top
   of NixOS.
+
+## Install system tools
+
 I'll be using NixOS packages for direnv, niv, and lorri, installed at the
   system level.
 Edit `/etc/nixos/configuration.nix`:
@@ -29,7 +32,10 @@ Edit `/etc/nixos/configuration.nix`:
 The lorri daemon should be running after `nixos-rebuild switch`, but
   there is currently a known issue where you may need to manually start or
   restart the lorri daemon via `systemctl` after the install.
-Next, proceed to setup direnv, niv, and lorri.
+
+
+## Setup direnv, niv, and lorri
+
 Add the direnv shell hook, e.g. in `~/.bashrc` for bash shells:
 
 ```shell
@@ -58,6 +64,9 @@ direnv: error /path/to/.envrc is blocked. Run `direnv allow` to approve its cont
 
 Run `direnv allow` and you should now see some direnv output whenever you
   change into the `hello` directory.
+
+## Update project environment
+
 Add the `hello` package to our project environment by editing the
   `shell.nix` created by `lorri init`:
 
@@ -112,10 +121,14 @@ $ echo $HELLO
 world
 ```
 
+## Create Rust project
+
+### Install Rust
+
 OK, now we have direnv, niv, and lorri working for us.
 Let's make a demo project using Rust.
-Since we are managing our dependencies with niv, let's make niv aware of
-  Rust packages directly from mozilla via github:
+Since we are managing our dependencies with niv, make niv aware of
+  Rust packages directly from mozilla (via github):
 
 ```shell
 $ niv add mozilla/nixpkgs-mozilla`
@@ -156,7 +169,7 @@ pkgs.mkShell {
 ```
 
 lorri will start building in the background.
-`lorri shell` will bring this activity to the foreground.
+`lorri shell` will bring this activity to the foreground if you want to see it.
 It will take a few minutes before your new environment is ready.
 
 ```
@@ -164,8 +177,8 @@ $ rustc --version
 rustc 1.46.0-nightly (feb3536eb 2020-06-09)
 ```
 
-Now let's serve some HTTP with Rocket.
-First, create a new Rust project:
+Confirmed! 
+Create a new Rust project:
 
 ```shell
 $ cargo init --vcs git .
@@ -187,6 +200,9 @@ $ target/debug/hello
 Hello, world!
 ```
 
+### Add HTTP functionality
+
+Let's serve some HTTP with Rocket.
 Add Rocket as a dependency to `Cargo.toml`:
 
 ```ini
@@ -233,6 +249,8 @@ $ curl http://localhost:8000
 Hello world!
 $ fg # (control-c to kill the server)
 ```
+
+## Create Nix package
 
 Make this into a nix package, using naersk, first adding it to niv:
 
