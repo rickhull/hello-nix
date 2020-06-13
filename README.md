@@ -62,8 +62,8 @@ $ cd .
 direnv: error /path/to/.envrc is blocked. Run `direnv allow` to approve its content
 ```
 
-Run `direnv allow` and you should now see some direnv output whenever you
-  change into the `hello` directory.
+Run `direnv allow`.
+Now direnv should give positive output when changing to a project dir.
 
 ## Update project environment
 
