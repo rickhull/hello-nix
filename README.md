@@ -221,7 +221,8 @@ $ cargo build
 ```
 
 This will download all dependencies and precompile Rocket.
-Now let's make a dumb HTTP server; edit `src/main.rs`:
+Now let's make a dumb HTTP server.
+Edit `src/main.rs`:
 
 ```rust
 # src/main.rs
@@ -257,7 +258,7 @@ $ fg # (control-c to kill the server)
 
 ## Create Nix package
 
-Make this into a nix package, using naersk, first adding it to niv:
+### Use naersk for packaging
 
 ```shell
 $ niv add nmattia/naersk
