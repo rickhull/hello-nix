@@ -12,53 +12,25 @@ I'd like to come up with some NixOS recipes for different box roles:
 I'm mostly playing with dev environments but ultimately looking to cook up
 build and app environments.
 
-For dev environments:
+For dev environments, this blog post provides most of what follows:
 
 * https://christine.website/blog/how-i-start-nix-2020-03-08
 
-Except install lorri and direnv via configuration.nix using stable packages.  e.g.
+I'll be adapting those instructions to use NixOS packages for direnv, niv,
+and lorri, via `/etc/nixos/configuration.nix`:
 
 ```
-  # List packages installed in system profile. To search, run:
   environment.systemPackages = with pkgs; [
-    # basics
-    busybox
-    tree
-    git
-
-    # editors
-    (emacs.override {
-      withX = false;
-      withGTK2 = false;
-      withGTK3 = false;
-    })
-
-    # nix style dev environments, lorri below as a service
     direnv
     niv
-
-    # languages
-    ruby
-    perl
-    python
-    python3
-    elixir
-
-    # build tools
-    gcc
-    gnumake
-
-    # ruby stuff
-    chruby
   ];
-
-  # Enable lorri for building dev environments
   services.lorri.enable = true;
 ```
 
-We'll be using direnv, niv, and lorri to craft a shell environment optimized
+We're using direnv, niv, and lorri to craft a shell environment optimized
 for Nix workflows, on a per-directory basis.  First, add the direnv shell
-hook, e.g. for bash: `eval "$(direnv hook bash)"` in ~/.bashrc
+hook, e.g. in .bashrc for bash shells: `eval "$(direnv hook bash)"`
+
 
 Now let's make hello world:
 
@@ -154,7 +126,9 @@ Now, create `nix/rust.nix`:
 
 let
   pkgs =
-    import sources.nixpkgs { overlays = [ (import sources.nixpkgs-mozilla) ]; };
+    import sources.nixpkgs {
+      overlays = [ (import sources.nixpkgs-mozilla) ];
+    };
   channel = "nightly";
   date = "2020-06-10";
   targets = [ ];
@@ -194,10 +168,22 @@ Now let's serve some HTTP with Rocket.  First, create a new Rust project:
 `cargo init --vcs git .`
 
 This creates `src/main.rs` and `Cargo.toml`.  It will also initiate a git repo.
+Let's build the default hello world program:
 
-Add Rocket as a dependency to `Cargo.toml`:
+`cargo build`
+
+This will build `src/main.rs` and produce a binary at
+`target/debug/$name_of_proj_dir`.  Try it:
 
 ```
+target/debug/hello
+Hello, world!
+```
+
+Now let's add Rocket as a dependency to `Cargo.toml`:
+
+```
+# Cargo.toml
 [dependencies]
 rocket = "0.4.3"
 ```
@@ -209,6 +195,7 @@ This will download all dependencies and precompile Rocket.
 Now let's make a dumb HTTP server; edit `src/main.rs`:
 
 ```
+# src/main.rs
 #![feature(proc_macro_hygiene, decl_macro)] // language features needed by Rocket
 
 // Import the rocket macros
@@ -246,6 +233,7 @@ to niv: `niv add nmattia/naersk`
 Create `hello.nix`:
 
 ```
+# hello.nix
 # import niv sources and the pinned nixpkgs
 { sources ? import ./nix/sources.nix, pkgs ? import sources.nixpkgs { }}:
 let
