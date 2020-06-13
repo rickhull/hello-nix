@@ -1,3 +1,5 @@
+## Rationale
+
 This is my revised version of the instructions here:
 https://christine.website/blog/how-i-start-nix-2020-03-08
 
