@@ -10,11 +10,11 @@ Let's use direnv, niv, and lorri to craft a shell environment optimized
   costly unnecessary rebuilds.
 
 Christine's workflow works with any Nix install, whereas we'll be running on
-  Nixos.
+  NixOS, using the power of Nix to maintain system state.
 
 ## Install system tools
 
-Let's use NixOS packages for direnv, niv, and lorri, installed at the
+Use NixOS packages for direnv, niv, and lorri, installed at the
   system level.
 Edit `/etc/nixos/configuration.nix`:
 
