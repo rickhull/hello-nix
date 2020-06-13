@@ -47,7 +47,7 @@ Create a project directory and do some initialization:
 ```shell
 $ mkdir -p hello
 $ cd hello
-$ niv init # creates nix/sources.json
+$ niv init # creates nix/sources.json and nix/sources.nix
 $ lorri init # creates shell.nix and .envrc
 ```
 
@@ -67,8 +67,10 @@ Run `direnv allow` and you should now see some direnv output whenever you
 
 ## Update project environment
 
-Add the `hello` package to our project environment by editing the
-  `shell.nix` created by `lorri init`:
+### Provide a package from nixpkgs
+
+Add the `hello` package (from nixpkgs) to our project environment by
+  editing the `shell.nix` created by `lorri init`:
 
 ```nix
 # shell.nix
@@ -91,6 +93,8 @@ With lorri running as a service, you should now be able to run `hello`:
 $ hello
 Hello, world!
 ```
+
+### Add environement variable
 
 Add an environment variable to `shell.nix`:
 
