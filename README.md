@@ -1,6 +1,9 @@
 *This is my revised version of the instructions here:
 https://christine.website/blog/how-i-start-nix-2020-03-08*
 
+Christine's workflow works with any Nix install, whereas these instructions
+assume we're running on NixOS, using the power of Nix to maintain system state.
+
 ## Rationale
 
 Let's use direnv, lorri, and niv to craft a shell environment optimized
@@ -11,9 +14,6 @@ Let's use direnv, lorri, and niv to craft a shell environment optimized
 * **Lorri** integrates direnv with Nix workflows, maintaining some state to
   avoid costly unnecessary rebuilds.
 * **Niv** helps manage dependencies in the Nix realm.
-
-Christine's workflow works with any Nix install, whereas we'll be running on
-  NixOS, using the power of Nix to maintain system state.
 
 ## Install system tools
 
