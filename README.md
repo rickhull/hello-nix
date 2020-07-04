@@ -3,21 +3,21 @@ https://christine.website/blog/how-i-start-nix-2020-03-08*
 
 ## Rationale
 
-Let's use direnv, niv, and lorri to craft a shell environment optimized
+Let's use direnv, lorri, and niv to craft a shell environment optimized
   for Nix workflows, on a per-directory basis.
 
 * **Direnv** maintains a project-specific shell environment, triggered by
   entering the project directory.
-* **Niv** helps manage dependencies in the Nix realm.
 * **Lorri** integrates direnv with Nix workflows, maintaining some state to
   avoid costly unnecessary rebuilds.
+* **Niv** helps manage dependencies in the Nix realm.
 
 Christine's workflow works with any Nix install, whereas we'll be running on
   NixOS, using the power of Nix to maintain system state.
 
 ## Install system tools
 
-Use NixOS packages for direnv, niv, and lorri, installed at the
+Use NixOS packages for direnv, lorri, and niv, installed at the
   system level.
 Edit `/etc/nixos/configuration.nix`:
 
@@ -36,7 +36,7 @@ The lorri daemon should be running after `nixos-rebuild switch`, but
   there is currently a known issue where you may need to manually start or
   restart the lorri daemon via `systemctl` after the install.
 
-## Setup direnv, niv, and lorri
+## Setup direnv, lorri, and niv
 
 Add the direnv shell hook, e.g. in `~/.bashrc` for bash shells:
 
@@ -49,8 +49,8 @@ Create a project directory and do some initialization:
 ```shell
 $ mkdir -p hello
 $ cd hello
-$ niv init # creates nix/sources.json and nix/sources.nix
 $ lorri init # creates shell.nix and .envrc
+$ niv init # creates nix/sources.json and nix/sources.nix
 ```
 
 Direnv works via the presence of `.envrc`, as created by `lorri init`.
@@ -126,7 +126,7 @@ $ echo $HELLO
 world
 ```
 
-OK, now we have direnv, niv, and lorri working for us.
+OK, now we have direnv, lorri, and niv working for us.
 
 ## Create Rust project
 
