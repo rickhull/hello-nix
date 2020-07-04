@@ -1,15 +1,16 @@
-## Rationale
+*This is my revised version of the instructions here:
+https://christine.website/blog/how-i-start-nix-2020-03-08*
 
-This is my revised version of the instructions here:
-https://christine.website/blog/how-i-start-nix-2020-03-08
+## Rationale
 
 Let's use direnv, niv, and lorri to craft a shell environment optimized
   for Nix workflows, on a per-directory basis.
-**Direnv** maintains a project-specific shell environment, triggered by
+
+* **Direnv** maintains a project-specific shell environment, triggered by
   entering the project directory.
-**Niv** helps manage dependencies in the Nix realm.
-**Lorri** integrates direnv with Nix workflows, maintaining some state to avoid
-  costly unnecessary rebuilds.
+* **Niv** helps manage dependencies in the Nix realm.
+* **Lorri** integrates direnv with Nix workflows, maintaining some state to
+  avoid costly unnecessary rebuilds.
 
 Christine's workflow works with any Nix install, whereas we'll be running on
   NixOS, using the power of Nix to maintain system state.
