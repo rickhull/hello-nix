@@ -1,3 +1,5 @@
+## Intro
+
 *This is my revised version of the instructions here:
 https://christine.website/blog/how-i-start-nix-2020-03-08*
 
@@ -6,7 +8,7 @@ assume we're running on NixOS, using the power of Nix to maintain system state.
 
 ## Rationale
 
-Let's use direnv, lorri, and niv to craft a shell environment optimized
+Use direnv, lorri, and niv to craft a shell environment optimized
   for Nix workflows, on a per-directory basis.
 
 * **Direnv** maintains a project-specific shell environment, triggered by
@@ -33,8 +35,8 @@ Edit `/etc/nixos/configuration.nix`:
 ```
 
 The lorri daemon should be running after `nixos-rebuild switch`, but
-  there is currently a known issue where you may need to manually start or
-  restart the lorri daemon via `systemctl` after the install.
+  there is currently a known issue where `systemctl start lorri` may
+  be needed after the install.
 
 ## Setup direnv, lorri, and niv
 
