@@ -10,7 +10,8 @@
       devShell  = pkgs.mkShell {
         nativeBuildInputs = [ pkgs.bashInteractive ];
         buildInputs = [
-          pkgs.rust
+          pkgs.rustc
+          pkgs.cargo
         ];
       };
     });
